@@ -56,7 +56,6 @@ function okStart() {
               name: 'quantity',
               message: 'How many of the item would you like to buy?',
             }
-
           ])
           .then(function(selection) {
 
