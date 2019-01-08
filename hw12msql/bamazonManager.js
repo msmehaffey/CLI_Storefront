@@ -62,7 +62,7 @@ function viewProducts() {
 };
 
 function viewLowInventory() {
-    connection.query("SELECT item_id AS 'Item ID', product_name AS 'Item Name', department_name AS 'Department', price AS 'Price($)', stock_quantity AS 'Quantity'  FROM itemList WHERE stock_quantity <= 5", function(err, res) {
+    connection.query("SELECT item_id AS 'Item ID', product_name AS 'Item Name', department_name AS 'Department', price AS 'Price($)', stock_quantity AS 'Quantity'  FROM itemList WHERE stock_quantity < 5", function(err, res) {
       
         if (err) throw err;
 
@@ -73,6 +73,7 @@ function viewLowInventory() {
 };
 
 function addToInventory() {
+    delete quantity;
     inquirer
     .prompt([
       {
@@ -84,25 +85,51 @@ function addToInventory() {
         {
             type: 'input',
             name: 'quantity',
-            message: 'How many units would you like to add?',
+            message: 'How many units would you like to add?'
           }
     ])
     .then(answers => {
-        connection.query("SELECT stock_quantity AS 'quantity' FROM itemList WHERE item_id = " + parseInt(answers.item), function(err, res) {
-            if (err) throw err;
-            var quantity = parseInt(res[0].quantity);
-            console.log(quantity)
-            console.log(answers.quantity)
-            quantity = quantity + parseInt(answers.quantity);
-
-
-            connection.query("UPDATE itemList SET stock_quantity = " + quantity + " WHERE item_id = " + parseInt(answers.item), function(err, res) {
+            connection.query("UPDATE itemList SET stock_quantity = stock_quantity + " + parseInt(answers.quantity) + " WHERE item_id = " + parseInt(answers.item), function(err, res) {
                 if (err) throw err;
                 console.log("Thank you, the changes have been made to the inventory");
                 managerView();
-            });
-        });
-        
+            }); 
+    });  
+};
+
+function addNewProduct() {
+    inquirer
+  .prompt([
+    {
+        type: 'input',
+        name: 'itemName',
+        message: 'Please enter the name of the product you would like to add to the store.',
+      },
+      {
+        type: 'list',
+        name: 'itemDepartment',
+        message: 'Please select the department of the item.',
+        choices: ['Electronics', 'Sports', 'Outdoors']
+      },
+      {
+        type: 'input',
+        name: 'itemPrice',
+        message: 'Please enter the price of the product'
+      },
+      {
+        type: 'input',
+        name: 'itemQuantity',
+        message: 'Please enter the starting quantity of the product'
+      }
+  ])
+  .then(answers => {
+    connection.query("INSERT INTO itemList(product_name, department_name, price, stock_quantity) VALUES (" + JSON.stringify(answers.itemName) + ", " + JSON.stringify(answers.itemDepartment) + ", " + parseInt(answers.itemPrice) + ", " + parseInt(answers.itemQuantity) + ")", function(err, res) {
+      
+        if (err) throw err;
+        else {
+        console.log("Inventory succesfully updated!");
+        managerView();
+        }
     });
-    
-}
+    })
+};
