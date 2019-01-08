@@ -11,5 +11,5 @@ Amazon-like storefront app that has a customer facing feature and a feature for 
 
 # Video Walk through demonstration for how to use. 
 * bamazonCustomer -- Demo: https://drive.google.com/file/d/13BnYsyXLQbdzZjMVpqkNMJDrQdaAaWJP/view
-* bamazonManager -- Demo :
+* bamazonManager -- Demo : https://drive.google.com/file/d/1bnwUwZqYFEbiHnk-w2IMjj2p1GJzkvsE/view
 
