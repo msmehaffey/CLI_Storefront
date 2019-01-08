@@ -58,7 +58,6 @@ function viewProducts() {
         console.log("Products in Store: " + aItems);
         managerView();
     });
-    managerView();
 };
 
 function viewLowInventory() {
